@@ -4,15 +4,23 @@ $username = "root";
 $password = "Senha123";
 $database = "meubanco";
 
-// Criar conexão
 
+$link = null;
 
-$link = new mysqli($servername, $username, $password, $database);
+try {
+    // Criar conexão
+    $link = new mysqli($servername, $username, $password, $database);
 
-/* check connection */
-if (mysqli_connect_errno()) {
-    printf("Connect failed: %s\n", mysqli_connect_error());
-    exit();
+} catch (mysqli_sql_exception $e) {
+    error_log("Erro de conexão com o banco de dados: " . $e->getMessage() . " no arquivo " . $e->getFile() . " na linha " . $e->getLine());
+
+    die("Desculpe, não foi possível conectar ao banco de dados neste momento. Por favor, tente novamente mais tarde.");
+}
+
+// --- Fechar a Conexão (boa prática) ---
+
+if ($link) {
+     $link->close();
 }
 
 ?>
